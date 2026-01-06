@@ -105,6 +105,7 @@ def train():
         model.train()
         total_loss = 0
         
+        num_batches = len(train_loader)
         for batch_idx, (x, y) in enumerate(train_loader):
             x, y = x.to(device), y.to(device)
             
@@ -118,6 +119,10 @@ def train():
             optimizer.step()
             
             total_loss += loss.item()
+            
+            # 显示进度
+            if (batch_idx + 1) % 100 == 0 or batch_idx == num_batches - 1:
+                print(f"\r  Epoch {epoch+1} 进度: {batch_idx+1}/{num_batches} batches, loss: {loss.item():.4f}", end="")
         
         avg_loss = total_loss / len(train_loader)
         epoch_time = time.time() - epoch_start_time
@@ -134,7 +139,7 @@ def train():
             val_loss /= len(val_loader) if len(val_loader) > 0 else 1
             
             elapsed = time.time() - train_start_time
-            print(f"Epoch {epoch+1}/{CONFIG['epochs']} | "
+            print(f"\nEpoch {epoch+1}/{CONFIG['epochs']} | "
                   f"Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f} | "
                   f"Epoch: {epoch_time:.1f}s | 总用时: {elapsed:.1f}s")
             
