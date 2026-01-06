@@ -6,6 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 from model import MiniGPT
 from tokenizer import CharTokenizer
 import os
+import time
 
 # ============ 超参数配置 ============
 CONFIG = {
@@ -97,7 +98,10 @@ def train():
     
     # 训练循环
     print("\n开始训练...")
+    train_start_time = time.time()
+    
     for epoch in range(CONFIG['epochs']):
+        epoch_start_time = time.time()
         model.train()
         total_loss = 0
         
@@ -116,6 +120,7 @@ def train():
             total_loss += loss.item()
         
         avg_loss = total_loss / len(train_loader)
+        epoch_time = time.time() - epoch_start_time
         
         # 定期评估
         if (epoch + 1) % CONFIG['eval_interval'] == 0:
@@ -128,8 +133,10 @@ def train():
                     val_loss += loss.item()
             val_loss /= len(val_loader) if len(val_loader) > 0 else 1
             
+            elapsed = time.time() - train_start_time
             print(f"Epoch {epoch+1}/{CONFIG['epochs']} | "
-                  f"Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f}")
+                  f"Train Loss: {avg_loss:.4f} | Val Loss: {val_loss:.4f} | "
+                  f"Epoch: {epoch_time:.1f}s | 总用时: {elapsed:.1f}s")
             
             # 生成示例
             model.eval()
@@ -137,6 +144,10 @@ def train():
             start_ids = torch.tensor([tokenizer.encode(start_text)], device=device)
             generated = model.generate(start_ids, max_new_tokens=50, temperature=0.8)
             print(f"生成示例: {tokenizer.decode(generated[0].tolist())}\n")
+    
+    # 训练完成统计
+    total_time = time.time() - train_start_time
+    print(f"\n训练完成！总用时: {total_time:.1f}s ({total_time/60:.1f}分钟)")
     
     # 保存模型
     torch.save(model.state_dict(), 'model.pt')
