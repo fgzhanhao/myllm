@@ -32,14 +32,13 @@ def train():
     print(f"问答数据: {len(text)} 字符")
     
     tokenizer = CharTokenizer()
-    tokenizer.load('tokenizer.json')  # 加载预训练的词表
     
-    # 检查是否有新字符，如果有则重新构建词表
-    new_chars = set(text) - set(tokenizer.char_to_idx.keys())
-    if new_chars:
-        print(f"发现新字符，重新构建词表...")
-        tokenizer.fit(text)
-        tokenizer.save('tokenizer.json')
+    # 先用问答数据构建词表（确保包含所有字符）
+    with open('data/chinese.txt', 'r', encoding='utf-8') as f:
+        chinese_text = f.read()
+    all_text = chinese_text + text  # 合并所有文本
+    tokenizer.fit(all_text)
+    tokenizer.save('tokenizer.json')
     
     data = tokenizer.encode(text)
     train_loader = DataLoader(TextDataset(data, CONFIG['max_seq_len']), 

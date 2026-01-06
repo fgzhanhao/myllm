@@ -7,7 +7,7 @@ import time
 
 CONFIG = {
     'd_model': 128, 'n_heads': 4, 'n_layers': 4, 'max_seq_len': 64,
-    'batch_size': 32, 'lr': 3e-4, 'epochs': 50,
+    'batch_size': 128, 'lr': 3e-4, 'epochs': 30,
     'data_path': 'data/chinese.txt',
 }
 
@@ -28,10 +28,19 @@ def train():
     
     with open(CONFIG['data_path'], 'r', encoding='utf-8') as f:
         text = f.read()
+    
+    # 同时加载问答数据，确保词表包含所有字符
+    try:
+        with open('data/qa.txt', 'r', encoding='utf-8') as f:
+            qa_text = f.read()
+        all_text = text + qa_text
+    except:
+        all_text = text
+    
     print(f"数据: {len(text)} 字符")
     
     tokenizer = CharTokenizer()
-    tokenizer.fit(text)
+    tokenizer.fit(all_text)  # 用所有文本构建词表
     tokenizer.save('tokenizer.json')
     data = tokenizer.encode(text)
     
