@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+env/
+venv/
+.venv/
+
+# PyTorch 模型文件（太大不适合提交）
+*.pt
+*.pth
+*.bin
+
+# 训练产物
+tokenizer.json
+*.log
+
+# 大数据文件（用 download_data.py 下载）
+mini-gpt/data/shakespeare.txt
+mini-gpt/data/tiny_shakespeare.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

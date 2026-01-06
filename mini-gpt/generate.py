@@ -24,7 +24,7 @@ def generate_text(prompt="To be", max_tokens=200, temperature=0.8, top_k=40):
         dropout=0.0  # 推理时关闭 dropout
     ).to(device)
     
-    model.load_state_dict(torch.load('model.pt', map_location=device))
+    model.load_state_dict(torch.load('model.pt', map_location=device, weights_only=True))
     model.eval()
     
     # 编码输入

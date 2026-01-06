@@ -10,21 +10,21 @@ import os
 # ============ 超参数配置 ============
 CONFIG = {
     # 模型参数
-    'd_model': 128,      # 嵌入维度
-    'n_heads': 4,        # 注意力头数
-    'n_layers': 4,       # Transformer 层数
-    'd_ff': 512,         # FFN 隐藏层维度
-    'max_seq_len': 128,  # 最大序列长度
+    'd_model': 256,      # 嵌入维度（大数据集用更大的模型）
+    'n_heads': 8,        # 注意力头数
+    'n_layers': 6,       # Transformer 层数
+    'd_ff': 1024,        # FFN 隐藏层维度
+    'max_seq_len': 256,  # 最大序列长度
     'dropout': 0.1,
     
     # 训练参数
-    'batch_size': 32,
+    'batch_size': 64,
     'learning_rate': 3e-4,
-    'epochs': 100,
-    'eval_interval': 10,  # 每 N 个 epoch 评估一次
+    'epochs': 20,        # 大数据集不需要太多 epoch
+    'eval_interval': 2,  # 每 N 个 epoch 评估一次
     
-    # 数据
-    'data_path': 'data/input.txt',
+    # 数据（可选: input.txt, tiny_shakespeare.txt, shakespeare.txt, chinese_poems.txt）
+    'data_path': 'data/tiny_shakespeare.txt',
     'train_split': 0.9,
 }
 
