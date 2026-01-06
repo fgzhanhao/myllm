@@ -97,7 +97,7 @@ def train():
     optimizer = torch.optim.AdamW(model.parameters(), lr=CONFIG['learning_rate'])
     
     # 训练循环
-    print("\n开始训练....")
+    print("\n开始训练......")
     train_start_time = time.time()
     
     for epoch in range(CONFIG['epochs']):
